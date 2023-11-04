@@ -1,8 +1,22 @@
 <template>
-  <div class="container">
+  <div class="box">
     <div class="titulo">
       <span>Produtos</span>
-      <hr />
+    </div>
+    <div class="cabecalho">
+      <model-padrao
+        primeiraPropriedade="Nome"
+        segundaPropriedade="Valor"
+        terceiraPropriedade="Quantidade"
+        quartaPropriedade="Observação"
+      />
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Pesquisar"
+        single-line
+        hide-details
+      ></v-text-field>
     </div>
     <div class="tabela">
       <tabela-padrao titulo="Clientes" :listaColunas="colunas" />
@@ -12,11 +26,13 @@
 
 <script>
 import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
+import ModelPadrao from "@/components/layout/ModelPadrao.vue";
 
 export default {
   name: "Produtos",
   components: {
     TabelaPadrao,
+    ModelPadrao,
   },
   data() {
     return {
@@ -28,6 +44,7 @@ export default {
         { text: "Observação", value: "observacao" },
         { text: "Data cadastro", value: "dataCadastro" },
       ],
+      search: "",
     };
   },
 };
@@ -43,7 +60,7 @@ export default {
 }
 
 .titulo span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.555);
 }
