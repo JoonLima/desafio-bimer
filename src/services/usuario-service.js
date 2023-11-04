@@ -1,9 +1,9 @@
 import http from "@/services/api.js";
 
-function login(usuario) {
+function login(email, senha) {
   return new Promise((resolve, reject) => {
     return http
-      .post("/login", usuario)
+      .post("/login", { email, senha })
       .then((response) => resolve(response))
       .catch((error) => reject(error));
   });

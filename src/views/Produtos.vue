@@ -4,12 +4,7 @@
       <span>Produtos</span>
     </div>
     <div class="cabecalho">
-      <model-padrao
-        primeiraPropriedade="Nome"
-        segundaPropriedade="Valor"
-        terceiraPropriedade="Quantidade"
-        quartaPropriedade="Observação"
-      />
+      <model-produto />
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
@@ -19,20 +14,27 @@
       ></v-text-field>
     </div>
     <div class="tabela">
-      <tabela-padrao titulo="Clientes" :listaColunas="colunas" />
+      <tabela-padrao
+        :search="search"
+        titulo="Clientes"
+        :listaColunas="colunas"
+        :itensTabela="produtos"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
-import ModelPadrao from "@/components/layout/ModelPadrao.vue";
+import ModelProduto from "@/components/layout/ModelProduto.vue";
+import produtoService from "@/services/produto-service";
+import Produto from "@/models/produto-model";
 
 export default {
   name: "Produtos",
   components: {
     TabelaPadrao,
-    ModelPadrao,
+    ModelProduto,
   },
   data() {
     return {
@@ -45,7 +47,18 @@ export default {
         { text: "Data cadastro", value: "dataCadastro" },
       ],
       search: "",
+      produtos: [],
     };
+  },
+
+  mounted() {
+    produtoService
+      .obterTodos()
+      .then((res) => {
+        this.produtos = res.data.map((p) => new Produto(p));
+        console.log(this.produtos);
+      })
+      .catch((error) => console.log(error));
   },
 };
 </script>

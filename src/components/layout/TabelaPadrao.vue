@@ -4,10 +4,10 @@
       <v-spacer></v-spacer>
     </v-card-title>
     <v-data-table
-      :headers="headers"
+      :headers="listaColunas"
       :search="search"
+      :items="itensTabela"
       no-data-text="Sem dados para serem exibidos."
-      height="200px"
     ></v-data-table>
   </v-card>
 </template>
@@ -17,14 +17,12 @@ export default {
   props: {
     titulo: { type: String, required: false, default: "" },
     listaColunas: { type: Array, required: true, default: undefined },
+    itensTabela: { type: Array, required: true, default: undefined },
     search: { type: String, required: false, default: "" },
   },
 
   data() {
-    return {
-      headers: this.listaColunas,
-      searchPadrao: this.search,
-    };
+    return {};
   },
 
   components: {},

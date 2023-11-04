@@ -4,12 +4,7 @@
       <span>Clientes</span>
     </div>
     <div class="cabecalho">
-      <model-padrao
-        primeiraPropriedade="Nome"
-        segundaPropriedade="CPF / CNPJ"
-        terceiraPropriedade="Telefone"
-        quartaPropriedade="E-mail"
-      />
+      <model-cliente />
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
@@ -19,14 +14,18 @@
       ></v-text-field>
     </div>
     <div class="tabela">
-      <tabela-padrao titulo="Clientes" :listaColunas="colunas" />
+      <tabela-padrao
+        :search="search"
+        titulo="Clientes"
+        :listaColunas="colunas"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
-import ModelPadrao from "@/components/layout/ModelPadrao.vue";
+import ModelCliente from "@/components/layout/ModelCliente.vue";
 
 export default {
   name: "Clientes",
@@ -37,7 +36,7 @@ export default {
   },
   components: {
     TabelaPadrao,
-    ModelPadrao,
+    ModelCliente,
   },
 
   data() {
