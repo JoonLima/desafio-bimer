@@ -19,23 +19,33 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="9">
-                <v-text-field label="Nome" required></v-text-field>
+                <v-text-field
+                  label="Nome"
+                  required
+                  v-model="produto.nome"
+                ></v-text-field>
               </v-col>
               <v-col cols="6">
                 <v-text-field
                   prefix="R$"
                   label="Valor"
                   type="text"
+                  v-model="produto.valor"
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
-                <v-text-field label="Quantidade" type="text"></v-text-field>
+                <v-text-field
+                  label="Quantidade"
+                  type="text"
+                  v-model="produto.quantidadeEstoque"
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-textarea
                   name="input-7-1"
                   rows="1"
                   label="Observação"
+                  v-model="produto.observacao"
                 ></v-textarea>
               </v-col>
             </v-row>
@@ -43,10 +53,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="#00383e" @click="dialog = false">
+          <v-btn color="#00383e" @click="cadastrar">
             <span class="span-gravar">Gravar</span>
           </v-btn>
-          <v-btn color="#00383e" outlined @click="dialog = false">
+          <v-btn color="#00383e" outlined @click="cancelarItem">
             <span>Cancelar</span>
           </v-btn>
         </v-card-actions>
@@ -58,19 +68,43 @@
 <script>
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiPlus } from "@mdi/js";
+import Produto from "@/models/produto-model";
+import produtoService from "@/services/produto-service";
 
 export default {
-  props: {
-    primeiraPropriedade: { type: String, required: false, default: "" },
-    segundaPropriedade: { type: String, required: false, default: "" },
-    terceiraPropriedade: { type: String, required: false, default: "" },
-    quartaPropriedade: { type: String, required: false, default: "" },
-  },
   data() {
     return {
       dialog: false,
       path: mdiPlus,
+      produto: new Produto(),
     };
+  },
+
+  methods: {
+    cadastrar() {
+      if (!this.produto.modeloValido()) {
+        console.log("Modelo inválido para cadastro.");
+      }
+
+      produtoService
+        .cadastrar(this.produto)
+        .then(() => {
+          console.log(this.produto);
+          this.produto = new Produto();
+          this.dialog = false;
+          this.$emit("produtoAdicionado");
+        })
+        .catch((error) => console.log(error));
+    },
+
+    salvarItem() {
+      console.log("oi");
+    },
+
+    cancelarItem() {
+      this.dialog = false;
+      this.produto = new Produto();
+    },
   },
 
   components: {

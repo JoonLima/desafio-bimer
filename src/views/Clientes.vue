@@ -18,6 +18,7 @@
         :search="search"
         titulo="Clientes"
         :listaColunas="colunas"
+        :itensTabela="clientes"
       />
     </div>
   </div>
@@ -26,14 +27,11 @@
 <script>
 import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
 import ModelCliente from "@/components/layout/ModelCliente.vue";
+import clienteService from "@/services/cliente-service";
+import Cliente from "@/models/cliente-model";
 
 export default {
   name: "Clientes",
-  data() {
-    return {
-      search: "",
-    };
-  },
   components: {
     TabelaPadrao,
     ModelCliente,
@@ -50,7 +48,23 @@ export default {
         { text: "Data cadastro", value: "dataCadastro" },
       ],
       search: "",
+      clientes: [],
     };
+  },
+
+  methods: {
+    obterTodosOsClientes() {
+      clienteService
+        .obterTodos()
+        .then((res) => {
+          this.clientes = res.data.map((c) => new Cliente(c));
+        })
+        .catch((error) => console.log(error));
+    },
+  },
+
+  mounted() {
+    this.obterTodosOsClientes();
   },
 };
 </script>

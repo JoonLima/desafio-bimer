@@ -4,7 +4,7 @@
       <span>Produtos</span>
     </div>
     <div class="cabecalho">
-      <model-produto />
+      <model-produto @produtoAdicionado="obterTodosOsProdutos" />
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
@@ -51,14 +51,19 @@ export default {
     };
   },
 
+  methods: {
+    obterTodosOsProdutos() {
+      produtoService
+        .obterTodos()
+        .then((res) => {
+          this.produtos = res.data.map((p) => new Produto(p));
+        })
+        .catch((error) => console.log(error));
+    },
+  },
+
   mounted() {
-    produtoService
-      .obterTodos()
-      .then((res) => {
-        this.produtos = res.data.map((p) => new Produto(p));
-        console.log(this.produtos);
-      })
-      .catch((error) => console.log(error));
+    this.obterTodosOsProdutos();
   },
 };
 </script>

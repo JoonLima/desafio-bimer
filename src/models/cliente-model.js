@@ -1,3 +1,5 @@
+import formatador from "@/util/formatador";
+
 export default class Cliente {
   constructor(obj) {
     obj = obj || {};
@@ -8,6 +10,6 @@ export default class Cliente {
     this.email = obj.email;
     this.telefone = obj.telefone;
     this.idUsuario = obj.idUsuario;
-    this.dataCadastro = obj.dataCadastro;
+    this.dataCadastro = formatador.formatarData(obj.dataCadastro);
   }
 }

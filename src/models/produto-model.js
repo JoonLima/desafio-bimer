@@ -11,4 +11,8 @@ export default class Produto {
     this.observacao = obj.observacao;
     this.dataCadastro = formatador.formatarData(obj.dataCadastro);
   }
+
+  modeloValido() {
+    return !!(this.nome && this.quantidadeEstoque);
+  }
 }
