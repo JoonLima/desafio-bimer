@@ -4,7 +4,15 @@
       <span>Produtos</span>
     </div>
     <div class="cabecalho">
-      <model-produto @produtoAdicionado="obterTodosOsProdutos" />
+      <v-btn @click="abrirModal" class="text-none" color="#00383e" dark>
+        <svg-icon class="icone" type="mdi" :path="iconeAdicionar"></svg-icon>
+        <span>Adicionar</span>
+        <modal-padrao-produtos
+          :exibirJanela="exibirJanela"
+          @fecharModal="exibirJanela = $event"
+        />
+      </v-btn>
+      <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
@@ -19,6 +27,7 @@
         titulo="Clientes"
         :listaColunas="colunas"
         :itensTabela="produtos"
+        :editarItem="editar"
       />
     </div>
   </div>
@@ -29,12 +38,16 @@ import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
 import ModelProduto from "@/components/layout/ModelProduto.vue";
 import produtoService from "@/services/produto-service";
 import Produto from "@/models/produto-model";
+import ModalPadraoProdutos from "@/components/layout/ModalPadraoProdutos.vue";
+import { mdiPlus } from "@mdi/js";
+import SvgIcon from "@jamescoyle/vue-icon";
 
 export default {
   name: "Produtos",
   components: {
     TabelaPadrao,
-    ModelProduto,
+    ModalPadraoProdutos,
+    SvgIcon,
   },
   data() {
     return {
@@ -45,9 +58,12 @@ export default {
         { text: "Quantidade", value: "quantidadeEstoque" },
         { text: "Observação", value: "observacao" },
         { text: "Data cadastro", value: "dataCadastro" },
+        { text: "Actions", value: "actions", sortable: false },
       ],
       search: "",
       produtos: [],
+      exibirJanela: false,
+      iconeAdicionar: mdiPlus,
     };
   },
 
@@ -59,6 +75,14 @@ export default {
           this.produtos = res.data.map((p) => new Produto(p));
         })
         .catch((error) => console.log(error));
+    },
+
+    editar(produto) {
+      alert(produto.id);
+    },
+
+    abrirModal() {
+      this.exibirJanela = true;
     },
   },
 
@@ -81,5 +105,10 @@ export default {
   font-size: 18px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.555);
+}
+
+.box .cabecalho {
+  display: flex;
+  align-items: center;
 }
 </style>

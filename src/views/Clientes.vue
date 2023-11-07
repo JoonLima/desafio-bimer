@@ -46,6 +46,7 @@ export default {
         { text: "E-mail", value: "email" },
         { text: "Telefone", value: "telefone" },
         { text: "Data cadastro", value: "dataCadastro" },
+        { text: "Actions", value: "actions", sortable: false },
       ],
       search: "",
       clientes: [],

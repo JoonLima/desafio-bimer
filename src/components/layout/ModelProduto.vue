@@ -2,10 +2,9 @@
   <v-row class="margin-button">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn class="text-none" color="#00383e" dark v-bind="attrs" v-on="on">
-          <svg-icon class="icone" type="mdi" :path="path"></svg-icon>
+        <template v-bind="attrs" v-on="on">
           <span>Adicionar</span>
-        </v-btn>
+        </template>
       </template>
       <v-card>
         <v-card-text>
@@ -21,7 +20,7 @@
               <v-col cols="9">
                 <v-text-field
                   label="Nome"
-                  required
+                  type="text"
                   v-model="produto.nome"
                 ></v-text-field>
               </v-col>
@@ -66,16 +65,15 @@
 </template>
 
 <script>
-import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiPlus } from "@mdi/js";
 import Produto from "@/models/produto-model";
 import produtoService from "@/services/produto-service";
 
 export default {
+  props: {
+    dialog: { type: Boolean, required: true, default: false },
+  },
   data() {
     return {
-      dialog: false,
-      path: mdiPlus,
       produto: new Produto(),
     };
   },
@@ -83,7 +81,17 @@ export default {
   methods: {
     cadastrar() {
       if (!this.produto.modeloValido()) {
-        console.log("Modelo inválido para cadastro.");
+        this.$swal({
+          icon: "error",
+          title: "Campos obrigatórios",
+          html: `
+            - Nome<br>
+            - Valor<br>
+            - Quantidade
+          `,
+          confirmButtonColor: "#00383e",
+        });
+        return;
       }
 
       produtoService
@@ -93,6 +101,12 @@ export default {
           this.produto = new Produto();
           this.dialog = false;
           this.$emit("produtoAdicionado");
+          this.$swal({
+            icon: "success",
+            title: "Produto cadastrado",
+            showConfirmButton: false,
+            timer: 1500,
+          });
         })
         .catch((error) => console.log(error));
     },
@@ -107,9 +121,7 @@ export default {
     },
   },
 
-  components: {
-    SvgIcon,
-  },
+  components: {},
 };
 </script>
 
