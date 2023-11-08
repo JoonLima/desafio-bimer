@@ -43,7 +43,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 4rem;
-  background-color: #00383e;
+  background-color: #165091;
   padding: 0 2rem;
 }
 
@@ -64,7 +64,8 @@ export default {
 }
 
 .menu .links a:hover {
-  border-bottom: 4px solid #cfe1ef;
+  color: #E5E5E5;
+  border-bottom: 4px solid #E5E5E5;
 }
 
 .menu .usuario {
@@ -78,7 +79,7 @@ export default {
   font-size: 2rem;
 }
 .menu .links .ativo {
-  color: #cfe1ef;
-  border-bottom: 4px solid #cfe1ef;
+  color: #E5E5E5;
+  border-bottom: 4px solid #E5E5E5;
 }
 </style>

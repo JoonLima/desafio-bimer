@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="exibirJanela"
-    max-width="60%"
+    max-width="50%"
     persistent
     scrollable
     :fullscreen="$vuetify.breakpoint.xsOnly"
@@ -18,7 +18,7 @@
       <v-card-actions class="justify-end">
         <v-btn
           class="text-none"
-          color="#00383e"
+          color="primary"
           dark
           @click="acaoBotaoPrimario()"
         >
@@ -70,3 +70,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+</style>
