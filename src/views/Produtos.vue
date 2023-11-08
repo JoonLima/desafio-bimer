@@ -9,6 +9,7 @@
         <span>Adicionar</span>
         <modal-padrao-produtos
           :exibirJanela="exibirJanela"
+          :modoEdicao="modoEdicao"
           @fecharModal="exibirJanela = $event"
         />
       </v-btn>
@@ -24,10 +25,9 @@
     <div class="tabela">
       <tabela-padrao
         :search="search"
-        titulo="Clientes"
+        titulo="Produto"
         :listaColunas="colunas"
         :itensTabela="produtos"
-        :editarItem="editar"
       />
     </div>
   </div>
@@ -35,7 +35,6 @@
 
 <script>
 import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
-import ModelProduto from "@/components/layout/ModelProduto.vue";
 import produtoService from "@/services/produto-service";
 import Produto from "@/models/produto-model";
 import ModalPadraoProdutos from "@/components/layout/ModalPadraoProdutos.vue";
@@ -63,6 +62,7 @@ export default {
       search: "",
       produtos: [],
       exibirJanela: false,
+      modoEdicao: false,
       iconeAdicionar: mdiPlus,
     };
   },
