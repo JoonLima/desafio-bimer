@@ -30,7 +30,7 @@
         <modal-padrao 
           titulo="Cliente" 
           v-model="exibirJanela" 
-          :acaoBotaoPrimario="salvarCadastro" 
+          :acaoBotaoPrimario="salvar" 
           :acaoBotaoSecundario="cancelarCadastro">
           <v-flex xs12 d-flex flex-wrap pt-3>
           <v-flex d-flex xs12 md2 pr-md-2 >
@@ -82,17 +82,14 @@
 </template>
 
 <script>
-import TabelaPadrao from "@/components/layout/TabelaPadrao.vue";
 import clienteService from "@/services/cliente-service";
 import ClienteModel from "@/models/cliente-model";
-import { mdiPlus, mdiPencilOutline, mdiDeleteOutline } from "@mdi/js";
 import ModalPadrao from '@/components/layout/ModalPadrao.vue'
 import formatador from "@/util/formatador";
 
 export default {
   name: "Clientes",
   components: {
-    TabelaPadrao,
     ModalPadrao
   },
 
@@ -109,13 +106,9 @@ export default {
       ],
       search: "",
       clientes: [],
+      cliente: new ClienteModel(),
       exibirJanela: false,
       modoEdicao: false,
-      modoCliente: false,
-      iconeAdicionar: mdiPlus,
-      iconeEditar: mdiPencilOutline,
-      iconeDeletar: mdiDeleteOutline,
-      cliente: new ClienteModel()
     };
   },
 
@@ -134,8 +127,16 @@ export default {
       this.exibirJanela = true;
     },
 
+    salvar(){
+      if(!this.modoEdicao){
+        this.salvarCadastro();
+      } else {
+        this.salvarEdicao();
+      }
+    },
+
     salvarCadastro(){
-      //validar campos obrigatórios
+      
       if(!this.cliente.modeloValido()){
         this.$swal({
           icon: "error",
@@ -159,6 +160,7 @@ export default {
         });
         this.cliente = new ClienteModel();
         this.obterTodosOsClientes();
+        this.exibirJanela = false;
       })
       .catch(error => {
         this.$swal({
@@ -168,18 +170,9 @@ export default {
           confirmButtonColor: "#165091",
         });
       })
-
-      this.exibirJanela = false;
     },
 
-    cancelarCadastro(){
-      this.exibirJanela = false;
-    },
-
-    editarCliente(item){
-      this.cliente = new ClienteModel(item);
-      this.exibirJanela = true;
-
+    salvarEdicao(){
       if(!this.cliente.modeloValido()){
         this.$swal({
           icon: "error",
@@ -213,7 +206,17 @@ export default {
         });
       })
 
+      this.exibirJanela = false;
+    },
 
+    cancelarCadastro(){
+      this.exibirJanela = false;
+    },
+
+    editarCliente(item){
+      this.modoEdicao = true;
+      this.cliente = new ClienteModel(item);
+      this.exibirJanela = true;
     },
 
     excluirCliente(item){
@@ -241,7 +244,7 @@ export default {
           })
         }
       })
-    }
+    },
   },
 
   filters:{

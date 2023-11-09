@@ -6,10 +6,10 @@ export default class Produto {
 
     this.id = obj.id;
     this.nome = obj.nome;
-    this.valor = formatador.formatarEmReal(obj.valor) || 0;
+    this.valor = obj.valor || 0;
     this.quantidadeEstoque = obj.quantidadeEstoque || 0;
     this.observacao = obj.observacao;
-    this.dataCadastro = formatador.formatarData(obj.dataCadastro);
+    this.dataCadastro = obj.dataCadastro;
   }
 
   modeloValido() {

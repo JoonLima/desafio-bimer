@@ -1,14 +1,17 @@
 <template>
   <v-app>
-    <nav-bar v-if="this.$route.name != 'login'" />
-    <v-main>
+    <nav-bar-2>
+      <v-main>
       <router-view />
     </v-main>
+    </nav-bar-2>
+    <!-- <nav-bar v-if="this.$route.name != 'login'" /> -->
   </v-app>
 </template>
 
 <script>
 import NavBar from "@/components/layout/NavBar.vue";
+import NavBar2 from '@/components/layout/NavBar2.vue';
 
 export default {
   name: "App",
@@ -19,6 +22,7 @@ export default {
 
   components: {
     NavBar,
+    NavBar2
   },
 };
 </script>

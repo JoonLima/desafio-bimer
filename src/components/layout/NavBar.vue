@@ -9,15 +9,15 @@
     <div class="usuario">
       <v-menu transition="slide-y-transition" bottom :offset-y="offset">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="transparent" dark v-bind="attrs" v-on="on">
-            <i class="bx bxs-user-circle"></i>
-            Jonathan
+          <v-btn max-width="11rem" color="transparent" dark v-bind="attrs" v-on="on">
+            <img class="foto-usuario" :src="obterFotoUsuario" alt="foto-usuario">
+            {{obterNomeUsuario}}
           </v-btn>
         </template>
         <v-list>
           <v-list-item>
             <v-list-item-title>
-              <v-btn block>Sair</v-btn>
+              <v-btn @click="logout" block>Sair</v-btn>
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import usuarioService from '@/services/usuario-service';
+import storageService from '@/util/storageService';
+
 export default {
   name: "NavBar",
   data() {
@@ -34,6 +37,37 @@ export default {
       offset: true,
     };
   },
+
+  methods:{
+    logout(){
+      usuarioService.logout()
+      .then(() => {
+        storageService.removerUsuarioNaStorage();
+        storageService.removerTokenNaStorage();
+        this.$router.push({path: '/login'});
+      })
+      .catch(error => {
+        this.$swal({
+          icon: "error",
+          title: "Erro ao realizar logout.",
+          text: `${error}`,
+          confirmButtonColor: "#165091",
+        });
+      })
+    }
+  },
+
+  computed:{
+    obterNomeUsuario(){
+      let usuario = storageService.obterUsuarioNaStorage()
+      return usuario.nome
+    },
+
+    obterFotoUsuario(){
+      let usuario = storageService.obterUsuarioNaStorage()
+      return usuario.foto
+    }
+  }
 };
 </script>
 
@@ -81,5 +115,12 @@ export default {
 .menu .links .ativo {
   color: #E5E5E5;
   border-bottom: 4px solid #E5E5E5;
+}
+
+.usuario .foto-usuario {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  margin-right: 5px;
 }
 </style>
