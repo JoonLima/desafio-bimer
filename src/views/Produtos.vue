@@ -124,15 +124,7 @@ export default {
       produtoService
         .obterTodos()
         .then((res) => {
-         let teste = res.data.map((p) => new ProdutoModel(p));
-         this.produtos = teste.sort((a, b) => {
-          if(a.quantidadeEstoque > b.quantidadeEstoque){
-            return -1 
-          } else {
-            return true
-          }
-         })
-         console.log(this.produtos)
+          this.produtos = res.data.map((p) => new ProdutoModel(p));
         })
         .catch((error) => console.log(error));
     },

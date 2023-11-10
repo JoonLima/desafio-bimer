@@ -1,13 +1,15 @@
 <template>
   <div class="container">
-    <canvas id="myChart"></canvas>
+    <grafico :produtos="produtos" :clientes="clientes" />
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js/auto'
 import produtoService from '@/services/produto-service';
 import ProdutoModel from '@/models/produto-model'
+import ClienteModel from '@/models/cliente-model'
+import Grafico from '@/components/layout/Grafico.vue';
+import clienteService from '@/services/cliente-service';
 
 
 export default {
@@ -15,32 +17,28 @@ export default {
 
   data() {
     return {
-      nomes: [],
-      quantidade:[]
+      produtos: [],
+      clientes: []
     }
   },
 
-  components: {  },
+  components: { Grafico },
 
   methods:{
      obterTodosOsProdutos() {
       produtoService
         .obterTodos()
         .then((res) => {
-         let todosOsProdutos = res.data.map((p) => new ProdutoModel(p));
-         this.produtos = todosOsProdutos.sort((a, b) => {
-          if(a.quantidadeEstoque > b.quantidadeEstoque){
-            return -1 
-          } else {
-            return true
-          }
-         })
+         this.produtos = res.data.map((p) => new ProdutoModel(p));
+        })
+        .catch((error) => console.log(error));
+    },
 
-          this.nomes = this.produtos.map(x => x.nome)
-          console.log(this.nomes)
-          this.quantidade = this.produtos.map(x => x.quantidadeEstoque)
-          console.log(this.quantidade)
-
+    obterTodosOsClientes() {
+      clienteService
+        .obterTodos()
+        .then((res) => {
+          this.clientes = res.data.map((c) => new ClienteModel(c));
         })
         .catch((error) => console.log(error));
     },
@@ -48,39 +46,12 @@ export default {
   },
 
   computed:{
-    obterNomes(){
-      let nomes = this.produtos.map(x => x.nome)
-      return nomes
-    }
+   
   },
 
   async mounted(){
     this.obterTodosOsProdutos();
-
-    const data = {
-      labels: this.nomes,
-       datasets:[{
-        label: 'Produtos com mais estoque',
-        data: this.quantidade
-       }]
-    }
-
-    const config= {
-      type: 'bar',
-      data: data,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    }
-
-    const ctx = document.getElementById('myChart');
-    const myChart = new Chart(ctx, config);
-
-    myChart;
+    this.obterTodosOsClientes();
   }
 };
 </script>
