@@ -1,126 +1,191 @@
 <template>
-  <nav class="menu">
-    <div class="logo"><router-link to="/">DESAFIO</router-link></div>
-    <div class="links">
-      <router-link active-class="ativo" exact to="/">Dashboard</router-link>
-      <router-link active-class="ativo" to="/clientes">Clientes</router-link>
-      <router-link active-class="ativo" to="/produtos">Produtos</router-link>
-    </div>
-    <div class="usuario">
-      <v-menu transition="slide-y-transition" bottom :offset-y="offset">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn max-width="11rem" color="transparent" dark v-bind="attrs" v-on="on">
-            <img class="foto-usuario" :src="obterFotoUsuario" alt="foto-usuario">
-            {{obterNomeUsuario}}
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn @click="logout" block>Sair</v-btn>
-            </v-list-item-title>
+ <v-card>
+    <v-navigation-drawer
+      v-model="drawer"
+      :mini-variant.sync="mini"
+      permanent
+      height="100vh"
+      fixed
+      color="primary"
+    >
+      <v-list-item class="px-2">
+        <v-btn icon @click.stop="menu">
+          <v-icon v-if="mini" size="32" color="#fff">mdi-menu</v-icon>
+          <v-icon v-else size="32" color="#fff">mdi-close</v-icon>
+        </v-btn>
+
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list>
+
+        <div class="usuario">
+          <v-list-item-avatar>
+            <v-img :src="obterFotoUsuario"></v-img>
+          </v-list-item-avatar>
+
+          <v-list-item-title>{{obterNomeUsuario}}</v-list-item-title>
+        </div>
+
+        <v-divider light></v-divider>
+
+        <router-link active-class="ativo" exact to="/">
+          <v-list-item @click="menu" link dark>
+            <v-list-item-icon>
+              <v-icon>mdi-view-dashboard-outline</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title >Dashboard</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
-  </nav>
+        </router-link>
+
+        <router-link active-class="ativo" exact to="/clientes">
+          <v-list-item @click="menu" link dark>
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title >Clientes</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
+        <router-link active-class="ativo" exact to="/produtos">
+          <v-list-item @click="menu" link dark>
+            <v-list-item-icon>
+              <v-icon>mdi-package-variant-closed</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Produtos</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
+        <router-link class="botao-logout" active-class="ativo" exact to="/produtos">
+          <v-list-item @click="logout" link dark>
+            <v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>Sair</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+       
+      </v-list>
+    </v-navigation-drawer>
+  </v-card>
 </template>
 
 <script>
 import usuarioService from '@/services/usuario-service';
 import storageService from '@/util/storageService';
 
-export default {
-  name: "NavBar",
-  data() {
-    return {
-      offset: true,
-    };
-  },
+  export default {
+    data: () => ({
+      drawer: true,
+      mini: true,
+    }),
 
-  methods:{
-    logout(){
-      usuarioService.logout()
-      .then(() => {
-        storageService.removerUsuarioNaStorage();
-        storageService.removerTokenNaStorage();
-        this.$router.push({path: '/login'});
-      })
-      .catch(error => {
-        this.$swal({
-          icon: "error",
-          title: "Erro ao realizar logout.",
-          text: `${error}`,
-          confirmButtonColor: "#165091",
-        });
-      })
-    }
-  },
+    methods:{
+        menu(){ 
+          this.mini = !this.mini
+        },
 
-  computed:{
-    obterNomeUsuario(){
-      let usuario = storageService.obterUsuarioNaStorage()
-      return usuario.nome
+        logout(){
+        usuarioService.logout()
+        .then(() => {
+          storageService.removerUsuarioNaStorage();
+          storageService.removerTokenNaStorage();
+          this.$router.push({path: '/login'});
+        })
+        .catch(error => {
+          this.$swal({
+            icon: "error",
+            title: "Erro ao realizar logout.",
+            text: `${error}`,
+            confirmButtonColor: "#165091",
+          });
+        })
+      },
+
+      fecharMenu(){
+        this.mini = true
+        this.drawer = !this.drawer
+      }
+     
     },
 
-    obterFotoUsuario(){
-      let usuario = storageService.obterUsuarioNaStorage()
-      return usuario.foto
-    }
+    computed:{
+      obterNomeUsuario(){
+        let usuario = storageService.obterUsuarioNaStorage()
+        return usuario.nome
+      },
+
+      obterFotoUsuario(){
+        let usuario = storageService.obterUsuarioNaStorage()
+        return usuario.foto
+      }
+    },
+    watch: {
+      group () {
+        this.drawer = false
+      },
+    },
+    
   }
-};
 </script>
 
 <style scoped>
-.menu {
+
+.menu{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 4rem;
-  background-color: #165091;
-  padding: 0 2rem;
+  flex-direction: column;
+  
+  padding-top: 2rem;
 }
 
-.menu .logo a {
-  font-weight: bold;
-  font-size: 25px;
-  color: #fff;
-  text-decoration: none;
-}
-
-.menu .links a {
-  /* margin: 2rem; */
-  padding: 1.2rem;
+.menu a{
   text-decoration: none;
   color: #fff;
-  transition: 0.4s;
-  border-bottom: 4px solid transparent;
-}
-
-.menu .links a:hover {
-  color: #E5E5E5;
-  border-bottom: 4px solid #E5E5E5;
-}
-
-.menu .usuario {
-  color: #fff;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  padding: 1.2rem 1rem;
+  border-radius: 10px;
 }
 
-.menu .usuario i {
-  font-size: 2rem;
-}
-.menu .links .ativo {
-  color: #E5E5E5;
-  border-bottom: 4px solid #E5E5E5;
+.menu a:hover{
+  background-color: #7BC6FF;
 }
 
-.usuario .foto-usuario {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  margin-right: 5px;
+.menu a span{
+  font-size: 1.2rem;
+  padding-left: 1rem;
 }
+
+.menu-hamburguer{
+  position: relative;
+}
+
+.usuario {
+  display: flex;
+  padding-left: .5rem;
+  padding-bottom: .5rem;
+  color: #fff;
+}
+
+.list-item{
+  overflow: hidden;
+}
+
+.botao-logout{
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
 </style>

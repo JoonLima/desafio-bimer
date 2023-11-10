@@ -1,17 +1,16 @@
 <template>
   <v-app>
-    <nav-bar-2>
+    <nav-bar v-if="this.$route.name != 'login'"></nav-bar>
       <v-main>
       <router-view />
     </v-main>
-    </nav-bar-2>
-    <!-- <nav-bar v-if="this.$route.name != 'login'" /> -->
+    
+    
   </v-app>
 </template>
 
 <script>
 import NavBar from "@/components/layout/NavBar.vue";
-import NavBar2 from '@/components/layout/NavBar2.vue';
 
 export default {
   name: "App",
@@ -22,7 +21,6 @@ export default {
 
   components: {
     NavBar,
-    NavBar2
   },
 };
 </script>
@@ -35,10 +33,11 @@ export default {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .box {
-  padding: 0 2rem;
+  padding-left: 5rem ;
 }
 
 #app {
@@ -52,5 +51,14 @@ export default {
 .box .cabecalho {
   display: flex;
   margin-top: 1rem;
+}
+
+.box .titulo-principal{
+  font-size: 1.5rem;
+}
+
+.box .btn-adicionar{
+  margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 </style>

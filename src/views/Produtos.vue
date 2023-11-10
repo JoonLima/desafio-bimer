@@ -1,15 +1,18 @@
 <template>
   <div class="box">
     <v-flex pt-10>
-        <v-btn class="btn-adicionar" color="primary" @click="adicionarProduto()">
-          <v-icon>mdi-plus</v-icon> Adicionar
-        </v-btn>
+      <span class="titulo-principal">
+        Produtos
+      </span>
+      <v-divider></v-divider>
+      <v-btn class="text-none btn-adicionar" color="primary" @click="adicionarProduto()">
+        <v-icon>mdi-plus</v-icon> Adicionar
+      </v-btn>
 
         <v-data-table
           :headers="colunas"
           :search="search"
           :items="produtos"
-          
           no-data-text="Sem dados para serem exibidos."
         >
 
@@ -121,7 +124,15 @@ export default {
       produtoService
         .obterTodos()
         .then((res) => {
-          this.produtos = res.data.map((p) => new ProdutoModel(p));
+         let teste = res.data.map((p) => new ProdutoModel(p));
+         this.produtos = teste.sort((a, b) => {
+          if(a.quantidadeEstoque > b.quantidadeEstoque){
+            return -1 
+          } else {
+            return true
+          }
+         })
+         console.log(this.produtos)
         })
         .catch((error) => console.log(error));
     },

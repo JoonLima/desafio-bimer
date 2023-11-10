@@ -1,7 +1,11 @@
 <template>
   <div class="box">
     <v-flex pt-10>
-        <v-btn class="btn-adicionar" color="primary" @click="adicionarCliente()">
+      <span class="titulo-principal">
+        Clientes
+      </span>
+      <v-divider></v-divider>
+        <v-btn class="text-none btn-adicionar" color="primary" @click="adicionarCliente()">
           <v-icon>mdi-plus</v-icon> Adicionar
         </v-btn>
 
@@ -279,7 +283,5 @@ export default {
   align-items: center;
 }
 
-.box .btn-adicionar{
-  margin-bottom: 2rem;
-}
+
 </style>

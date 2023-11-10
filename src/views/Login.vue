@@ -10,6 +10,7 @@
         required
       ></v-text-field>
       <v-text-field
+      outlined
         v-model="senha"
         :rules="senhaRules"
         label="Senha"
@@ -18,8 +19,9 @@
         prepend-icon="mdi-lock-outline"
         @click:append="show = !show"
         required
+
       ></v-text-field>
-      <v-btn max-height="50px" block color="#00383e" @click="login">
+      <v-btn dark max-height="50px" block color="#00383e" @click="login">
         <span class="span-entrar">Entrar</span>
       </v-btn>
     </v-container>
@@ -65,7 +67,7 @@ export default {
 <style scoped>
 .box-login {
   max-width: 400px;
-  min-height: 22rem;
+  min-height: 20rem;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(78, 77, 77, 0.445);
@@ -83,6 +85,6 @@ export default {
 }
 
 .span-entrar {
-  color: #fff;
+  
 }
 </style>
