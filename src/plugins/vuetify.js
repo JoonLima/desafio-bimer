@@ -11,9 +11,9 @@ export default new Vuetify({
             light: {
                 primary: "#165091",
                 secondary: "#B2D7EF", // #FFCDD2
-                icone: "#0000"
+                icone: "#000"
             },
-                dark: {
+            dark: {
                 primary: colors.orange.darken1, //#ffa50094, // #E53935
                 secondary: colors.orange.lighten5, // #FF
             }

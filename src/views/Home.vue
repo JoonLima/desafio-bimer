@@ -1,6 +1,13 @@
 <template>
-  <div class="container">
+  <div class="box">
+    <v-flex pt-5>
+    <span class="titulo-principal">
+        Dashboard
+      </span>
+      <v-divider></v-divider>
+
     <grafico :produtos="produtos" :clientes="clientes" />
+    </v-flex>
   </div>
 </template>
 

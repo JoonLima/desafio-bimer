@@ -28,7 +28,7 @@
           <v-list-item-title>{{obterNomeUsuario}}</v-list-item-title>
         </div>
 
-        <v-divider light></v-divider>
+        <v-divider ></v-divider>
 
         <router-link active-class="ativo" exact to="/">
           <v-list-item @click="menu" link dark>

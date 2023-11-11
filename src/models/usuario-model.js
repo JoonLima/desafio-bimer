@@ -8,4 +8,8 @@ export default class Usuario {
     this.senha = obj.senha;
     this.foto = obj.foto;
   }
+
+  modeloValidoLogin(){
+    return !!(this.email && this.senha)
+  }
 }

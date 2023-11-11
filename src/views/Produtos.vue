@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <v-flex pt-10>
+    <v-flex pt-5>
       <span class="titulo-principal">
         Produtos
       </span>
@@ -29,7 +29,7 @@
               <v-icon> mdi-pencil-outline  </v-icon>
             </v-btn>
 
-            <v-btn icon color="#00383e" @click="excluirProduto(item)">
+            <v-btn icon color="icone" @click="excluirProduto(item)">
               <v-icon> mdi-delete-outline </v-icon>
             </v-btn>
           </template>
@@ -75,12 +75,11 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs12 md12 pt-4>
-            <v-text-field
-              dense
+            <v-textarea
               label="Observação"
-              type="text"
+              rows="1"
               v-model="produto.observacao"
-            ></v-text-field>
+            ></v-textarea>
           </v-flex>
         </v-flex>
         </modal-padrao>

@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <v-flex pt-10>
+    <v-flex pt-5>
       <span class="titulo-principal">
         Clientes
       </span>
@@ -11,7 +11,6 @@
 
         <v-data-table
           :headers="colunas"
-          :search="search"
           :items="clientes"
           no-data-text="Sem dados para serem exibidos."
         >
@@ -25,10 +24,67 @@
               <v-icon> mdi-pencil-outline  </v-icon>
             </v-btn>
 
-            <v-btn icon color="#00383e" @click="excluirCliente(item)">
+            <v-btn icon color="icone" @click="excluirCliente(item)">
               <v-icon> mdi-delete-outline </v-icon>
             </v-btn>
           </template>
+
+          <template v-slot:primeiras-colunas-personalizadas="{ item }">
+          <td class="px-0 pb-1">
+            <v-flex d-flex>
+              <v-flex d-flex flex-column>
+                <v-flex>
+                  <destaque-pesquisa class="pl-1 pt-1 fonte-mobile texto-truncado">{{ item.nome }}</destaque-pesquisa>
+                </v-flex>
+
+                <v-flex d-flex>
+                  <v-flex d-flex flex-column flex-grow-0 pl-1 class="text-right">
+                    <h3 class="label-padrao-mobile">Quantidade</h3>
+                    <destaque-pesquisa>{{ item.cpfOuCnpj }}</destaque-pesquisa>
+                  </v-flex>
+
+                  <v-flex d-flex flex-column class="text-right">
+                    <h3 class="label-padrao-mobile">Valor líquido</h3>
+                    <destaque-pesquisa>{{ item.email }}</destaque-pesquisa>
+                  </v-flex>
+
+                  <v-flex d-flex flex-column class="text-right">
+                    <h3 class="label-padrao-mobile">Total do item</h3>
+                    <destaque-pesquisa>{{ item.telefone }}</destaque-pesquisa>
+                  </v-flex>
+
+                  <v-flex d-flex flex-column class="text-right">
+                    <h3 class="label-padrao-mobile">Total do item</h3>
+                    <destaque-pesquisa >{{ item.dataCadastro | dataFormatada }}</destaque-pesquisa>
+                  </v-flex>
+
+                  <v-flex d-flex flex-grow-0 align-center pl-2>
+                    <v-btn
+                      color="primary"
+                      class="ma-0 ml-1"
+                      icon
+                      x-small
+                      @click="editarCliente(item)"
+                    >
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+
+                    <v-btn
+                      color="primary"
+                      class="mx-1"
+                      icon
+                      x-small
+                      @click="excluirCliente(item)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-flex>
+
+                </v-flex>
+              </v-flex>
+            </v-flex>
+          </td>
+        </template>
         </v-data-table>
 
         <modal-padrao 
@@ -108,11 +164,11 @@ export default {
         { text: "Data cadastro", value: "dataCadastro" },
         { text: "Actions", value: "actions", sortable: false },
       ],
-      search: "",
       clientes: [],
       cliente: new ClienteModel(),
       exibirJanela: false,
       modoEdicao: false,
+      tamanhoMobileETablet: false
     };
   },
 

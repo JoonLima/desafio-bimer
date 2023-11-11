@@ -33,11 +33,11 @@ export default {
   font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 .box {
-  padding-left: 5rem ;
+  padding-left: 5rem;
+  padding-right: 2rem;
 }
 
 #app {
@@ -55,6 +55,7 @@ export default {
 
 .box .titulo-principal{
   font-size: 1.5rem;
+  margin-left: 1rem;
 }
 
 .box .btn-adicionar{

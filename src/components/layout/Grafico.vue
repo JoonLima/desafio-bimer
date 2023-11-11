@@ -2,9 +2,15 @@
   <div class="box-grafico">
 
         <div class="grafico-quantidades">
+            <span class="titulo-grafico">
+                Produtos com maior quantidade em estoque
+            </span>
             <canvas id="graficoQuantidade"></canvas>    
         </div>
         <div class="grafico-negativos">
+            <span class="titulo-grafico">
+                Quantidade Cliente x Produto
+            </span>
             <canvas id="graficoNegativos"></canvas>    
         </div>
     </div>
@@ -58,6 +64,7 @@ export default {
                 mode: "nearest",
                 intersect: true,
             },
+             
       },
         }
     },
@@ -85,10 +92,12 @@ export default {
                     data: {
                         labels: nomes,
                         datasets: [{
-                            label: "Produtos com maior quantidade",
+                            label: "Quantidade",
                             backgroundColor: '#165091',
                             data: quantidades,
-                            fill: false
+                            fill: false,
+                            barPercentage: 0.3,
+                            barThickness: 6,
                         }]
                     },
                     options: this.opcoesGrafico
@@ -116,11 +125,14 @@ export default {
                         datasets: [{
                             label: "Quantidade",
                              backgroundColor: [
-                                'rgb(255, 99, 132)',
+                                '#165091',
                                 'rgb(54, 162, 235)',
                             ],
                             data: [quantidadeProdutos, quantidadeClientes],
-                            hoverOffset: 4
+                            hoverOffset: 4,
+                            borderRadius: 10,
+                            borderWidth: 3,
+                            
                         }]
                     },
                     options: this.opcoesGraficoProdutosClientes
@@ -147,17 +159,45 @@ export default {
 <style scoped>
 
 .box-grafico{
-    border: 1px solid red;
+    margin-top: 2rem;
     display: flex;
+    width: 100%;
+    
+}
+
+@media (max-width: 1260px) {
+    .box-grafico {
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+   
+}
+
+.box-grafico .grafico-negativos{
+    width: 100%;
+    margin: 0 auto;
+    height: 400px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
-.box-grafico .grafico-quantidades,
-.box-grafico .grafico-negativos{
-    width: 1200px;
+.box-grafico .grafico-quantidades{
+    width: 100%;
     margin: 0 auto;
-    height: 350px;
+    height: 100%;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-grafico .titulo-grafico{
+    font-weight: 500;
+    margin-bottom: 1rem;
 }
 
 </style>

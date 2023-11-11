@@ -5,23 +5,21 @@
       <v-text-field
         v-model="email"
         :rules="emailRules"
-        label="E-mail"
+        placeholder="E-mail"
         prepend-icon="mdi-email-outline"
         required
       ></v-text-field>
       <v-text-field
-      outlined
         v-model="senha"
         :rules="senhaRules"
-        label="Senha"
+        placeholder="Senha"
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show ? 'text' : 'password'"
         prepend-icon="mdi-lock-outline"
         @click:append="show = !show"
         required
-
       ></v-text-field>
-      <v-btn dark max-height="50px" block color="#00383e" @click="login">
+      <v-btn dark max-height="50px" block color="primary" @click="login">
         <span class="span-entrar">Entrar</span>
       </v-btn>
     </v-container>
@@ -58,7 +56,13 @@ export default {
           storageService.salvarTokenNaStorage(res.data.token);
           this.$router.push({ path: "/" });
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          this.$swal({
+          icon: "error",
+          title: "E-mail ou senha incorretos",
+          confirmButtonColor: "#00A884",
+        });
+        });
     },
   },
 };
@@ -84,7 +88,4 @@ export default {
   font-size: 2rem;
 }
 
-.span-entrar {
-  
-}
 </style>
