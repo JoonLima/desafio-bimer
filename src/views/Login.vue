@@ -69,11 +69,11 @@ export default {
           this.$swal({
           icon: "error",
           title: "E-mail ou senha incorretos",
-          confirmButtonColor: "#00A884",
+          confirmButtonColor: "#165091",
         });
         });
          this.loading = false;
-      },2000)
+      },1400)
      
     },
   },
@@ -82,7 +82,7 @@ export default {
 
 <style scoped>
 .box-login {
-  max-width: 400px;
+  max-width: 25%;
   min-height: 20rem;
   display: flex;
   flex-direction: column;
@@ -98,6 +98,13 @@ export default {
 .titulo-login {
   font-weight: bold;
   font-size: 2rem;
+}
+
+@media (max-width: 600px) {
+
+  .box-login {
+  max-width: 80%
+}
 }
 
 </style>

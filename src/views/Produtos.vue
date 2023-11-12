@@ -194,7 +194,8 @@ export default {
           icon: "error",
           title: "Campos obrigatórios",
           html: `- Nome<br>
-                 - Quantidade `,
+                 - Quantidade<br>
+                 - Valor `,
           confirmButtonColor: "#165091",
         });
         return

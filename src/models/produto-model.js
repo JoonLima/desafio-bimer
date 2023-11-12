@@ -13,6 +13,6 @@ export default class Produto {
   }
 
   modeloValido() {
-    return !!(this.nome && this.quantidadeEstoque);
+    return !!(this.nome && this.quantidadeEstoque && this.valor);
   }
 }
