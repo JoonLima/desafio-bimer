@@ -4,14 +4,14 @@
       <span class="titulo-login"> Login </span>
       <v-text-field
         v-model="email"
-        :rules="emailRules"
+        :rules="regrasEmail"
         placeholder="E-mail"
         prepend-icon="mdi-email-outline"
         required
       ></v-text-field>
       <v-text-field
         v-model="senha"
-        :rules="senhaRules"
+        :rules="regrasSenha"
         placeholder="Senha"
         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
         :type="show ? 'text' : 'password'"
@@ -19,7 +19,13 @@
         @click:append="show = !show"
         required
       ></v-text-field>
-      <v-btn dark max-height="50px" block color="primary" @click="login">
+      <v-btn 
+        :loading="loading" 
+        dark 
+        max-height="50px" 
+        block 
+        color="primary" 
+        @click="login">
         <span class="span-entrar">Entrar</span>
       </v-btn>
     </v-container>
@@ -36,19 +42,22 @@ export default {
     return {
       show: false,
       usuario: new Usuario(),
+      loading: false,
       email: "",
       senha: "",
-      emailRules: [
+      regrasEmail: [
         (v) => !!v || "Campo obrigatório",
         (v) => /.+@.+\..+/.test(v) || "E-mail inválido",
       ],
-      senhaRules: [(v) => !!v || "Campo obrigatório"],
+      regrasSenha: [(v) => !!v || "Campo obrigatório"],
     };
   },
 
   methods: {
     login() {
-      usuarioService
+      this.loading = true;
+      setTimeout(() => {
+        usuarioService
         .login(this.email, this.senha)
         .then((res) => {
           this.usuario = res.data.usuario;
@@ -56,13 +65,16 @@ export default {
           storageService.salvarTokenNaStorage(res.data.token);
           this.$router.push({ path: "/" });
         })
-        .catch((error) => {
+        .catch(() => {
           this.$swal({
           icon: "error",
           title: "E-mail ou senha incorretos",
           confirmButtonColor: "#00A884",
         });
         });
+         this.loading = false;
+      },2000)
+     
     },
   },
 };

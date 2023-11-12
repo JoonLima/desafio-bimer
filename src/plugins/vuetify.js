@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuetify from "vuetify/lib/framework";
-import colors from 'vuetify/lib/util/colors'
 
 Vue.use(Vuetify);
 
@@ -11,11 +10,11 @@ export default new Vuetify({
             light: {
                 primary: "#165091",
                 secondary: "#616161", // #FFCDD2
-                icone: "#000"
+                icone: "#165091",
             },
             dark: {
-                primary: colors.orange.darken1, //#ffa50094, // #E53935
-                secondary: colors.orange.lighten5, // #FF
+                primary: '#165091',
+                icone: "#FFF",
             }
     }}
 });

@@ -1,6 +1,5 @@
 <template>
   <div class="box-grafico">
-
         <div class="grafico-quantidades">
             <span class="titulo-grafico">
                 Produtos com maior estoque
@@ -66,7 +65,7 @@ export default {
             },
              
       },
-        }
+    }
     },
 
     methods:{
@@ -105,7 +104,7 @@ export default {
 
                 const context = document.getElementById('graficoQuantidade').getContext('2d');
                 new Chart(context, config);
-            },200)
+            },500)
             
             
         },
@@ -138,7 +137,7 @@ export default {
 
                 const context = document.getElementById('graficoProdutoCliente').getContext('2d');
                 new Chart(context, config);
-            },200)
+            },500)
             
             
         }

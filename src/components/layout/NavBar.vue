@@ -98,20 +98,20 @@ import storageService from '@/util/storageService';
         },
 
         logout(){
-        usuarioService.logout()
-        .then(() => {
-          storageService.removerUsuarioNaStorage();
-          storageService.removerTokenNaStorage();
-          this.$router.push({path: '/login'});
-        })
-        .catch(error => {
-          this.$swal({
-            icon: "error",
-            title: "Erro ao realizar logout.",
-            text: `${error}`,
-            confirmButtonColor: "#165091",
-          });
-        })
+          usuarioService.logout()
+          .then(() => {
+            storageService.removerUsuarioNaStorage();
+            storageService.removerTokenNaStorage();
+            this.$router.push({path: '/login'});
+          })
+          .catch(error => {
+            this.$swal({
+              icon: "error",
+              title: "Erro ao realizar logout.",
+              text: `${error}`,
+              confirmButtonColor: "#165091",
+            });
+          })
       },
 
       fecharMenu(){
@@ -146,7 +146,6 @@ import storageService from '@/util/storageService';
 .menu{
   display: flex;
   flex-direction: column;
-  
   padding-top: 2rem;
 }
 

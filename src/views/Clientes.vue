@@ -1,21 +1,41 @@
 <template>
   <div class="box">
-    <v-flex pt-5>
+    <v-flex>
+      <div class="cabecalho">
       <span class="titulo-principal">
         Clientes
       </span>
+      <tema-vue />
+      </div>
       <v-divider></v-divider>
         <v-btn class="text-none btn-adicionar" color="primary" @click="adicionarCliente()">
           <v-icon>mdi-plus</v-icon> Adicionar
         </v-btn>
 
         <v-data-table
-          :class="{'tabela': tamanhoMobile}"
           :headers="colunas"
           :items="clientes"
           :hide-default-header="tamanhoMobile"
           no-data-text="Sem dados para serem exibidos."
         >
+
+        <template v-slot:[`item.dataCadastro`]="{ item }">
+            {{ item.dataCadastro | dataFormatada }}
+          </template>
+
+          <template v-slot:[`item.cpfOuCnpj`]="{ item }">
+            {{ item.cpfOuCnpj | cpfCnpjFormatado }}
+          </template>
+
+          <template v-slot:[`item.actions`]="{ item }">
+            <v-btn icon color="icone" @click="editarCliente(item)">
+              <v-icon> mdi-pencil-outline  </v-icon>
+            </v-btn>
+
+            <v-btn icon color="icone" @click="excluirCliente(item)">
+              <v-icon> mdi-delete-outline </v-icon>
+            </v-btn>
+          </template>
 
           <template v-if="tamanhoMobile" v-slot:[`item`]="{ item }">
             <td class="linha-mobile">
@@ -48,11 +68,11 @@
                       {{ item.dataCadastro | dataFormatada }}
                     </div>
                     <div class="botoes-mobile">
-                      <v-btn icon color="primary" @click="editarCliente(item)">
+                      <v-btn icon color="icone" @click="editarCliente(item)">
                         <v-icon> mdi-pencil-outline  </v-icon>
                       </v-btn>
 
-                      <v-btn icon color="primary" @click="excluirCliente(item)">
+                      <v-btn icon color="icone" @click="excluirCliente(item)">
                         <v-icon> mdi-delete-outline </v-icon>
                       </v-btn>
                     </div>
@@ -62,27 +82,7 @@
               
             </td>    
             <hr>      
-          </template>
-
-          <template v-slot:[`item.dataCadastro`]="{ item }">
-            {{ item.dataCadastro | dataFormatada }}
-          </template>
-
-          <template v-slot:[`item.cpfOuCnpj`]="{ item }">
-            {{ item.cpfOuCnpj | cpfCnpjFormatado }}
-          </template>
-
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-btn icon color="primary" @click="editarCliente(item)">
-              <v-icon> mdi-pencil-outline  </v-icon>
-            </v-btn>
-
-            <v-btn icon color="primary" @click="excluirCliente(item)">
-              <v-icon> mdi-delete-outline </v-icon>
-            </v-btn>
-          </template>
-
-          
+          </template>          
         </v-data-table>
 
         <modal-padrao 
@@ -111,11 +111,11 @@
           <v-flex xs12 md6 pr-md-2 pt-4>
             <v-text-field
               dense
-              class="input-number"
               label="CPF / CNPJ"
               counter='14'
               maxlength="14"
-              type="number"
+              :rules="regrasCPFCNPJ"
+              type="text"
               v-model="cliente.cpfOuCnpj"
             ></v-text-field>
           </v-flex>
@@ -133,10 +133,10 @@
               dense
               label="E-mail"
               type="text"
+              :rules="regrasEmail"
               v-model="cliente.email"
             ></v-text-field>
           </v-flex>
-          
         </v-flex>
         </modal-padrao>
     </v-flex>
@@ -150,11 +150,14 @@ import ClienteModel from "@/models/cliente-model";
 import ModalPadrao from '@/components/layout/ModalPadrao.vue'
 import formatador from "@/util/formatador";
 import { COLUNAS_TABELA_CLIENTE } from '@/constants/constants.js'
+import TemaVue from '@/components/layout/TemaVue.vue';
+
 
 export default {
   name: "Clientes",
   components: {
-    ModalPadrao
+    ModalPadrao,
+    TemaVue
   },
 
   data() {
@@ -164,7 +167,8 @@ export default {
       cliente: new ClienteModel(),
       exibirJanela: false,
       modoEdicao: false,
-
+      regrasCPFCNPJ: [v => v.length > 10 || 'Formato inválido'],
+      regrasEmail: [(v) => /.+@.+\..+/.test(v) || "E-mail inválido",],
     };
   },
 
@@ -179,6 +183,7 @@ export default {
     },
 
     adicionarCliente(){
+      this.modoEdicao = false;
       this.cliente = new ClienteModel();
       this.exibirJanela = true;
     },
@@ -336,9 +341,6 @@ export default {
 </script>
 
 <style scoped>
-.tabela {
-  margin-top: 2rem;
-}
 
 .titulo {
   margin-top: 1.5rem;
@@ -352,7 +354,9 @@ export default {
 
 .box .cabecalho {
   display: flex;
+  width: 100%;
   align-items: center;
+  justify-content: space-between;  
 }
 
 .mobile{
@@ -394,6 +398,13 @@ export default {
   display: flex;
   justify-content: flex-end;
   max-width: 50%;
+}
+
+@media (max-width: 600px) {
+
+  .btn-adicionar{
+    width: 100%;
+  }
 }
 
 </style>

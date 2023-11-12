@@ -1,11 +1,13 @@
 <template>
   <div class="box">
-    <v-flex pt-5>
-    <span class="titulo-principal">
+    <v-flex >
+       <div class="cabecalho">
+      <span class="titulo-principal">
         Dashboard
       </span>
+      <tema-vue />
+      </div>
       <v-divider></v-divider>
-
     <grafico :produtos="produtos" :clientes="clientes" />
     </v-flex>
   </div>
@@ -15,6 +17,7 @@
 import produtoService from '@/services/produto-service';
 import ProdutoModel from '@/models/produto-model'
 import ClienteModel from '@/models/cliente-model'
+import TemaVue from '@/components/layout/TemaVue.vue';
 import Grafico from '@/components/layout/Grafico.vue';
 import clienteService from '@/services/cliente-service';
 
@@ -29,7 +32,7 @@ export default {
     }
   },
 
-  components: { Grafico },
+  components: { Grafico, TemaVue },
 
   methods:{
      obterTodosOsProdutos() {
@@ -62,3 +65,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.box .cabecalho {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;  
+}
+</style>

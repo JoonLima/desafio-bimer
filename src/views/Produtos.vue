@@ -1,9 +1,12 @@
 <template>
   <div class="box">
-    <v-flex pt-5>
-      <span class="titulo-principal">
-        Produtos
-      </span>
+    <v-flex>
+      <div class="cabecalho">
+        <span class="titulo-principal">
+          Produtos
+        </span>
+        <tema-vue />
+      </div>
       <v-divider></v-divider>
       <v-btn class="text-none btn-adicionar" color="primary" @click="adicionarProduto()">
         <v-icon>mdi-plus</v-icon> Adicionar
@@ -23,6 +26,16 @@
           </template>
           <template v-slot:[`item.dataCadastro`]="{ item }">
             {{ item.dataCadastro | dataFormatada }}
+          </template>
+
+          <template v-slot:[`item.actions`]="{ item }">
+            <v-btn icon color="icone" @click="editarProduto(item)">
+              <v-icon> mdi-pencil-outline  </v-icon>
+            </v-btn>
+
+            <v-btn icon color="icone" @click="excluirProduto(item)">
+              <v-icon> mdi-delete-outline </v-icon>
+            </v-btn>
           </template>
 
           <template v-if="tamanhoMobile" v-slot:[`item`]="{ item }">
@@ -56,11 +69,11 @@
                       {{ item.dataCadastro | dataFormatada }}
                     </div>
                     <div class="botoes-mobile">
-                      <v-btn icon color="primary" @click="editarProduto(item)">
+                      <v-btn icon color="icone" @click="editarProduto(item)">
                         <v-icon> mdi-pencil-outline  </v-icon>
                       </v-btn>
 
-                      <v-btn icon color="primary" @click="excluirProduto(item)">
+                      <v-btn icon color="icone" @click="excluirProduto(item)">
                         <v-icon> mdi-delete-outline </v-icon>
                       </v-btn>
                     </div>
@@ -69,17 +82,7 @@
             </td>    
             <hr>      
           </template>
-
-          <template v-slot:[`item.actions`]="{ item }">
-            <v-btn icon color="icone" @click="editarProduto(item)">
-              <v-icon> mdi-pencil-outline  </v-icon>
-            </v-btn>
-
-            <v-btn icon color="icone" @click="excluirProduto(item)">
-              <v-icon> mdi-delete-outline </v-icon>
-            </v-btn>
-          </template>
-          </v-data-table>
+        </v-data-table>
        
 
         <modal-padrao 
@@ -109,6 +112,7 @@
             <v-text-field
               dense
               label="Valor"
+              prefix="R$"
               type="text"
               v-model="produto.valor"
             ></v-text-field>
@@ -137,6 +141,7 @@
 <script>
 import produtoService from "@/services/produto-service";
 import ProdutoModel from '@/models/produto-model'
+import TemaVue from '@/components/layout/TemaVue.vue';
 import ModalPadrao from '@/components/layout/ModalPadrao.vue'
 import formatador from "@/util/formatador";
 import { COLUNAS_TABELA_PRODUTO } from '@/constants/constants.js'
@@ -145,7 +150,8 @@ import { COLUNAS_TABELA_PRODUTO } from '@/constants/constants.js'
 export default {
   name: "Produtos",
   components: {
-    ModalPadrao
+    ModalPadrao,
+    TemaVue
   },
   data() {
     return {
@@ -168,8 +174,9 @@ export default {
         .catch((error) => console.log(error));
     },
 
-     adicionarProduto(){
-      this.cliente = new ProdutoModel();
+    adicionarProduto(){
+      this.modoEdicao = false;
+      this.produto = new ProdutoModel();
       this.exibirJanela = true;
     },
 
@@ -313,9 +320,6 @@ export default {
 </script>
 
 <style scoped>
-.tabela {
-  margin-top: 2rem;
-}
 
 .titulo {
   margin-top: 1.5rem;
@@ -329,7 +333,9 @@ export default {
 
 .box .cabecalho {
   display: flex;
+  width: 100%;
   align-items: center;
+  justify-content: space-between;  
 }
 
 .box .btn-adicionar{
@@ -376,6 +382,8 @@ export default {
   justify-content: flex-end;
   max-width: 50%;
 }
+
+
 
 @media (max-width: 600px) {
 

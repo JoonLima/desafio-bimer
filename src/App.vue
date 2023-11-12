@@ -22,6 +22,9 @@ export default {
   components: {
     NavBar,
   },
+
+  methods:{
+  }
 };
 </script>
 
@@ -35,13 +38,24 @@ export default {
   padding: 0;
 }
 
+*::-webkit-scrollbar{
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track{
+  background-color: #FFF;
+}
+
+*::-webkit-scrollbar-thumb{
+  background-color: #165091;
+  border: 1px solid #fff;
+  border-radius: 50px;
+}
+
 .box {
   padding-left: 5rem;
   padding-right: 2rem;
-}
-
-#app {
-  background-color: rgb(240, 240, 240);
 }
 
 .btn-padrao {
@@ -55,11 +69,11 @@ export default {
 
 .box .titulo-principal{
   font-size: 1.5rem;
-  margin-left: 1rem;
 }
 
 .box .btn-adicionar{
   margin-bottom: 2rem;
   margin-top: 2rem;
 }
+
 </style>
