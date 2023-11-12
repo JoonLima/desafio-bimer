@@ -10,81 +10,79 @@
         </v-btn>
 
         <v-data-table
+          :class="{'tabela': tamanhoMobile}"
           :headers="colunas"
           :items="clientes"
+          :hide-default-header="tamanhoMobile"
           no-data-text="Sem dados para serem exibidos."
         >
+
+          <template v-if="tamanhoMobile" v-slot:[`item`]="{ item }">
+            <td class="linha-mobile">
+              <div class="linha-dados-mobile">
+                <div :class="{'mobile': tamanhoMobile}">
+                  <div class="conteudo">
+                    <span>Nome</span>
+                    {{ item.nome }}
+                  </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>CPF / CNPJ</span>
+                      {{ item.cpfOuCnpj | cpfCnpjFormatado}}
+                    </div>
+                    <div class="conteudo">
+                      <span>Telefone</span>
+                      {{ item.telefone }}
+                    </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>E-mail</span>
+                      {{ item.email }}
+                    </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>Data cadastro</span>
+                      {{ item.dataCadastro | dataFormatada }}
+                    </div>
+                    <div class="botoes-mobile">
+                      <v-btn icon color="primary" @click="editarCliente(item)">
+                        <v-icon> mdi-pencil-outline  </v-icon>
+                      </v-btn>
+
+                      <v-btn icon color="primary" @click="excluirCliente(item)">
+                        <v-icon> mdi-delete-outline </v-icon>
+                      </v-btn>
+                    </div>
+                </div>
+              </div>
+                
+              
+            </td>    
+            <hr>      
+          </template>
 
           <template v-slot:[`item.dataCadastro`]="{ item }">
             {{ item.dataCadastro | dataFormatada }}
           </template>
 
+          <template v-slot:[`item.cpfOuCnpj`]="{ item }">
+            {{ item.cpfOuCnpj | cpfCnpjFormatado }}
+          </template>
+
           <template v-slot:[`item.actions`]="{ item }">
-            <v-btn icon color="icone" @click="editarCliente(item)">
+            <v-btn icon color="primary" @click="editarCliente(item)">
               <v-icon> mdi-pencil-outline  </v-icon>
             </v-btn>
 
-            <v-btn icon color="icone" @click="excluirCliente(item)">
+            <v-btn icon color="primary" @click="excluirCliente(item)">
               <v-icon> mdi-delete-outline </v-icon>
             </v-btn>
           </template>
 
-          <template v-slot:primeiras-colunas-personalizadas="{ item }">
-          <td class="px-0 pb-1">
-            <v-flex d-flex>
-              <v-flex d-flex flex-column>
-                <v-flex>
-                  <destaque-pesquisa class="pl-1 pt-1 fonte-mobile texto-truncado">{{ item.nome }}</destaque-pesquisa>
-                </v-flex>
-
-                <v-flex d-flex>
-                  <v-flex d-flex flex-column flex-grow-0 pl-1 class="text-right">
-                    <h3 class="label-padrao-mobile">Quantidade</h3>
-                    <destaque-pesquisa>{{ item.cpfOuCnpj }}</destaque-pesquisa>
-                  </v-flex>
-
-                  <v-flex d-flex flex-column class="text-right">
-                    <h3 class="label-padrao-mobile">Valor líquido</h3>
-                    <destaque-pesquisa>{{ item.email }}</destaque-pesquisa>
-                  </v-flex>
-
-                  <v-flex d-flex flex-column class="text-right">
-                    <h3 class="label-padrao-mobile">Total do item</h3>
-                    <destaque-pesquisa>{{ item.telefone }}</destaque-pesquisa>
-                  </v-flex>
-
-                  <v-flex d-flex flex-column class="text-right">
-                    <h3 class="label-padrao-mobile">Total do item</h3>
-                    <destaque-pesquisa >{{ item.dataCadastro | dataFormatada }}</destaque-pesquisa>
-                  </v-flex>
-
-                  <v-flex d-flex flex-grow-0 align-center pl-2>
-                    <v-btn
-                      color="primary"
-                      class="ma-0 ml-1"
-                      icon
-                      x-small
-                      @click="editarCliente(item)"
-                    >
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                      color="primary"
-                      class="mx-1"
-                      icon
-                      x-small
-                      @click="excluirCliente(item)"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                  </v-flex>
-
-                </v-flex>
-              </v-flex>
-            </v-flex>
-          </td>
-        </template>
+          
         </v-data-table>
 
         <modal-padrao 
@@ -113,14 +111,18 @@
           <v-flex xs12 md6 pr-md-2 pt-4>
             <v-text-field
               dense
+              class="input-number"
               label="CPF / CNPJ"
-              type="text"
+              counter='14'
+              maxlength="14"
+              type="number"
               v-model="cliente.cpfOuCnpj"
             ></v-text-field>
           </v-flex>
           <v-flex xs12 md6 pl-md-2 pt-4>
             <v-text-field
               dense
+              class="input-number"
               label="Telefone"
               type="text"
               v-model="cliente.telefone"
@@ -134,6 +136,7 @@
               v-model="cliente.email"
             ></v-text-field>
           </v-flex>
+          
         </v-flex>
         </modal-padrao>
     </v-flex>
@@ -146,6 +149,7 @@ import clienteService from "@/services/cliente-service";
 import ClienteModel from "@/models/cliente-model";
 import ModalPadrao from '@/components/layout/ModalPadrao.vue'
 import formatador from "@/util/formatador";
+import { COLUNAS_TABELA_CLIENTE } from '@/constants/constants.js'
 
 export default {
   name: "Clientes",
@@ -155,20 +159,12 @@ export default {
 
   data() {
     return {
-      colunas: [
-        { text: "Código", value: "id" },
-        { text: "Nome", value: "nome" },
-        { text: "CPF / CNPJ", value: "cpfOuCnpj" },
-        { text: "E-mail", value: "email" },
-        { text: "Telefone", value: "telefone" },
-        { text: "Data cadastro", value: "dataCadastro" },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
+      colunas: COLUNAS_TABELA_CLIENTE,
       clientes: [],
       cliente: new ClienteModel(),
       exibirJanela: false,
       modoEdicao: false,
-      tamanhoMobileETablet: false
+
     };
   },
 
@@ -305,12 +301,32 @@ export default {
         }
       })
     },
+
+    verificarTeclasDigitadas(e){
+      let x = e.which || e.keycode;
+      
+      if(x >= 48 || x <= 57){
+        return true
+      } else {
+        return false
+      }
+    }
   },
 
   filters:{
     dataFormatada(data){
       return formatador.formatarData(data)
+    },
+
+    cpfCnpjFormatado(valor){
+      return formatador.formatCnpjCpf(valor);
     }
+  },
+
+  computed:{
+    tamanhoMobile() {
+      return this.$vuetify.breakpoint.xsOnly;
+    },
   },
 
   mounted() {
@@ -339,5 +355,45 @@ export default {
   align-items: center;
 }
 
+.mobile{
+  display: flex;
+  text-align: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.mobile{
+  display: flex;
+  text-align: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.mobile span{
+  color: grey;
+  font-size: .8rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.conteudo {
+  font-size: 13px;
+}
+
+.linha-mobile{
+  align-items: center;
+  min-height: 9rem;
+}
+
+.botoes-mobile{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  max-width: 50%;
+}
 
 </style>

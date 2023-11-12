@@ -3,15 +3,15 @@
 
         <div class="grafico-quantidades">
             <span class="titulo-grafico">
-                Produtos com maior quantidade em estoque
+                Produtos com maior estoque
             </span>
             <canvas id="graficoQuantidade"></canvas>    
         </div>
-        <div class="grafico-negativos">
+        <div class="grafico-produto-cliente">
             <span class="titulo-grafico">
                 Quantidade Cliente x Produto
             </span>
-            <canvas id="graficoNegativos"></canvas>    
+            <canvas id="graficoProdutoCliente"></canvas>    
         </div>
     </div>
 </template>
@@ -116,8 +116,6 @@ export default {
                 let quantidadeClientes = this.clientes.length;
                 let quantidadeProdutos = this.produtos.length;
 
-                console.log(quantidadeClientes, quantidadeProdutos)
-
                 const config = {
                     type: 'doughnut',
                     data: {
@@ -138,7 +136,7 @@ export default {
                     options: this.opcoesGraficoProdutosClientes
                 };
 
-                const context = document.getElementById('graficoNegativos').getContext('2d');
+                const context = document.getElementById('graficoProdutoCliente').getContext('2d');
                 new Chart(context, config);
             },200)
             
@@ -170,10 +168,14 @@ export default {
         flex-direction: column;
         margin-top: 1rem;
     }
+
+    .box-grafico .grafico-produto-cliente .titulo-grafico{
+        margin-top: 5rem;
+    }
    
 }
 
-.box-grafico .grafico-negativos{
+.box-grafico .grafico-produto-cliente{
     width: 100%;
     margin: 0 auto;
     height: 400px;

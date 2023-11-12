@@ -9,19 +9,65 @@
         <v-icon>mdi-plus</v-icon> Adicionar
       </v-btn>
 
+      
         <v-data-table
           :headers="colunas"
           :search="search"
+          :hide-default-header="tamanhoMobile"
           :items="produtos"
           no-data-text="Sem dados para serem exibidos."
+         
         >
-
           <template v-slot:[`item.valor`]="{ item }">
             {{ item.valor | valorFormatado }}
           </template>
-
           <template v-slot:[`item.dataCadastro`]="{ item }">
             {{ item.dataCadastro | dataFormatada }}
+          </template>
+
+          <template v-if="tamanhoMobile" v-slot:[`item`]="{ item }">
+            <td class="linha-mobile">
+              <div class="linha-dados-mobile">
+                <div :class="{'mobile': tamanhoMobile}">
+                  <div class="conteudo">
+                    <span>Nome</span>
+                    {{ item.nome }}
+                  </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>Valor</span>
+                      {{ item.valor | valorFormatado }}
+                    </div>
+                    <div class="conteudo">
+                      <span>Quantidade</span>
+                      {{ item.quantidadeEstoque }}
+                    </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>Observação</span>
+                      {{ item.observacao }}
+                    </div>
+                  </div>
+                  <div :class="{'mobile': tamanhoMobile}">
+                    <div class="conteudo">
+                      <span>Data cadastro</span>
+                      {{ item.dataCadastro | dataFormatada }}
+                    </div>
+                    <div class="botoes-mobile">
+                      <v-btn icon color="primary" @click="editarProduto(item)">
+                        <v-icon> mdi-pencil-outline  </v-icon>
+                      </v-btn>
+
+                      <v-btn icon color="primary" @click="excluirProduto(item)">
+                        <v-icon> mdi-delete-outline </v-icon>
+                      </v-btn>
+                    </div>
+                </div>
+              </div>
+            </td>    
+            <hr>      
           </template>
 
           <template v-slot:[`item.actions`]="{ item }">
@@ -33,7 +79,8 @@
               <v-icon> mdi-delete-outline </v-icon>
             </v-btn>
           </template>
-        </v-data-table>
+          </v-data-table>
+       
 
         <modal-padrao 
           titulo="Produto" 
@@ -92,6 +139,7 @@ import produtoService from "@/services/produto-service";
 import ProdutoModel from '@/models/produto-model'
 import ModalPadrao from '@/components/layout/ModalPadrao.vue'
 import formatador from "@/util/formatador";
+import { COLUNAS_TABELA_PRODUTO } from '@/constants/constants.js'
 
 
 export default {
@@ -101,15 +149,7 @@ export default {
   },
   data() {
     return {
-      colunas: [
-        { text: "Código", value: "id" },
-        { text: "Nome", value: "nome" },
-        { text: "Valor", value: "valor" },
-        { text: "Quantidade", value: "quantidadeEstoque" },
-        { text: "Observação", value: "observacao" },
-        { text: "Data cadastro", value: "dataCadastro" },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
+      colunas: COLUNAS_TABELA_PRODUTO,
       search: "",
       produtos: [],
       produto: new ProdutoModel(),
@@ -260,6 +300,12 @@ export default {
     }
   },
 
+  computed:{
+    tamanhoMobile() {
+      return this.$vuetify.breakpoint.xsOnly;
+    },
+  },
+
   mounted() {
     this.obterTodosOsProdutos();
   },
@@ -288,5 +334,53 @@ export default {
 
 .box .btn-adicionar{
   margin-bottom: 2rem;
+}
+
+.mobile{
+  display: flex;
+  text-align: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.mobile{
+  display: flex;
+  text-align: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  font-size: 15px;
+  padding: 5px;
+}
+
+.mobile span{
+  color: grey;
+  font-size: .8rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.conteudo {
+  font-size: 13px;
+}
+
+.linha-mobile{
+  align-items: center;
+  min-height: 9rem;
+}
+
+.botoes-mobile{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  max-width: 50%;
+}
+
+@media (max-width: 600px) {
+
+  .btn-adicionar{
+    width: 100%;
+  }
 }
 </style>
